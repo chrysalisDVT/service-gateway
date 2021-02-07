@@ -1,0 +1,56 @@
+
+#spring.application.name=GATEWAY
+#server.port=7777
+#
+## Forward the api requests to the respective servers
+#ribbon.eureka.enabled=true
+#spring.cloud.gateway.ignoredServices=*
+#spring.cloud.gateway.sensitiveHeaders=''
+#
+#spring.cloud.gateway.routes.Product.uri=/api/product/**
+#spring.cloud.gateway.routes.Product.serviceId=Product
+#spring.cloud.gateway.routes.Product.stripPrefix=false
+#
+#spring.cloud.gateway.routes.Warehouse.path=/api/warehouse/**
+#spring.cloud.gateway.routes.Warehouse.serviceId=Warehouse
+#spring.cloud.gateway.routes.Warehouse.stripPrefix=false
+#
+#
+##Eureka Configuration
+#eureka.client.service-url.defaultZone=http://${eureka_ip}:${eureka_port}/eureka/
+#eureka.instance.nonSecurePortEnabled=true
+#eureka.instance.securePortEnabled=false
+#ribbon.IsSecure=false
+#management.security.enabled=false
+#
+#
+#
+#eureka.instance.lease-expiration-duration-in-seconds=2
+
+spring:
+  application:
+    name: GATEWAY
+  cloud:
+    gateway:
+      routes:
+      - id: PRODUCT
+        uri: lb://PRODUCT
+        predicates:
+        - Path=/product/**
+      - id: WAREHOUSE
+        uri: lb://WAREHOUSE
+        predicates:
+        - Path=/warehouse/**
+server:
+  port: 7777
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8999/eureka/
+  instance:
+    non-secure-port-enabled: true
+    secure-port-enabled: false
+    lease-expiration-duration-in-seconds: 2
+    prefer-ip-address: true
